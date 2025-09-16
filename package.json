@@ -1,0 +1,21 @@
+{
+  "name": "moviemood",
+  "version": "1.0.0",
+  "description": "Movie Mood is an app that makes it easier to select content worth watching based on your mood, your time availability, and more.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lemosjuliana/MovieMood.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lemosjuliana/MovieMood/issues"
+  },
+  "homepage": "https://github.com/lemosjuliana/MovieMood#readme"
+}
