@@ -1,5 +1,3 @@
-
-
 export type MovieSearchItem = {
   Title: string;
   Year: string;
@@ -22,18 +20,24 @@ export type MovieDetails = {
 
 const BACKEND_URL = "http://localhost:4000/api";
 
-// Call backend instead of OMDb directly
-export async function findByMood(mood: string, limit = 3, maxMinutes?: number): Promise<MovieDetails[]> {
+// Call backend instead of the movie API directly
+export async function findByMood(
+  mood: string,
+  limit = 3,
+  maxMinutes?: number
+): Promise<MovieDetails[]> {
   const params = new URLSearchParams({ mood, limit: String(limit) });
   if (maxMinutes) params.append("maxMin", String(maxMinutes));
 
   const res = await fetch(`${BACKEND_URL}/movies?${params.toString()}`);
   if (!res.ok) throw new Error("Failed to fetch movies");
-  return res.json();
+
+  return res.json(); // expects backend to return MovieDetails[]
 }
 
 export async function surpriseMe(): Promise<MovieDetails | null> {
   const res = await fetch(`${BACKEND_URL}/surprise`);
   if (!res.ok) throw new Error("Failed to fetch surprise movie");
-  return res.json();
+
+  return res.json(); // expects backend to return a single MovieDetails
 }

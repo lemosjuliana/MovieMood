@@ -1,5 +1,4 @@
 import axios from "axios";
-
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -11,56 +10,97 @@ const __dirname = path.dirname(__filename);
 // Load .env from backend folder
 dotenv.config({ path: path.join(__dirname, ".env") });
 
-const API_KEY = process.env.OMDB_KEY;
-if (!API_KEY) throw new Error("Missing OMDB_KEY env var");
+// API keys
+const TMDB_KEY = process.env.TMDB_KEY;
+const OMDB_KEY = process.env.OMDB_KEY;
 
-console.log("OMDb API Key:", API_KEY);
 
 
-const BASE_URL = "https://www.omdbapi.com/";
+if (!TMDB_KEY) throw new Error("Missing TMDB_KEY env var");
+if (!OMDB_KEY) throw new Error("Missing OMDB_KEY env var");
 
-// Functions
-function assertApiKey() {
-  if (!API_KEY) throw new Error("Missing OMDB_KEY env var");
-}
+// Base URLs
+const TMDB_BASE = "https://api.themoviedb.org/3";
+const OMDB_BASE = "https://www.omdbapi.com/";
 
-export async function searchByQuery(query, page = 1) {
-  assertApiKey();
-  const res = await axios.get(BASE_URL, {
-    params: { apikey: API_KEY, s: query, type: "movie", page },
+// Mood to TMDb genre IDs
+const moodToGenreId = {
+  Happy: 35,       // Comedy
+  Energetic: 28,   // Action
+  Anxious: 27,     // Horror
+  Peaceful: 18,    // Drama
+  Thankful: 10749, // Romance
+};
+
+// Helper: get basic movie list from TMDb
+async function getMoviesByGenre(genreId, limit = 3) {
+  const res = await axios.get(`${TMDB_BASE}/discover/movie`, {
+    params: {
+      api_key: TMDB_KEY,
+      with_genres: genreId,
+      sort_by: "popularity.desc",
+      page: 1,
+    },
   });
-  if (res.data?.Response === "False") return [];
-  return res.data.Search ?? [];
+  return res.data.results.slice(0, limit);
 }
 
-export async function getById(imdbID) {
-  assertApiKey();
-  const res = await axios.get(BASE_URL, {
-    params: { apikey: API_KEY, i: imdbID, plot: "short" },
+// Helper: get detailed info from OMDb using movie title
+async function getMovieDetailsFromOMDb(title) {
+  const res = await axios.get(OMDB_BASE, {
+    params: {
+      apikey: OMDB_KEY,
+      t: title,
+      type: "movie",
+    },
   });
-  return res.data?.Response === "True" ? res.data : null;
+
+  if (res.data.Response === "False") return null;
+
+  return {
+    Title: res.data.Title,
+    Year: res.data.Year,
+    Rated: res.data.Rated,
+    Runtime: res.data.Runtime,
+    Genre: res.data.Genre,
+    Plot: res.data.Plot,
+    Poster: res.data.Poster,
+    imdbID: res.data.imdbID,
+  };
 }
+
 
 export async function findByMood(mood, limit = 3, maxMinutes) {
-  const basic = await searchByQuery(mood, 1);
-  const details = await Promise.all(basic.slice(0, 10).map(m => getById(m.imdbID)));
-  const cleaned = details.filter(Boolean).map(d => ({
-    ...d,
-    runtimeMin: parseInt(d.Runtime, 10) || NaN,
-  }));
+  const genreId = moodToGenreId[mood];
+  if (!genreId) throw new Error(`Unknown mood: ${mood}`);
 
-  const filtered = typeof maxMinutes === "number"
-    ? cleaned.filter(d => !Number.isNaN(d.runtimeMin) && d.runtimeMin <= maxMinutes)
-    : cleaned;
+  // Step 1: Get movies from TMDb
+  const tmdbMovies = await getMoviesByGenre(genreId, limit * 2);
 
-  return filtered.slice(0, limit);
+  // Step 2: Get details from OMDb
+  const detailedMovies = [];
+  for (const movie of tmdbMovies) {
+    const details = await getMovieDetailsFromOMDb(movie.title);
+    if (!details) continue;
+
+
+    if (maxMinutes) {
+      const runtimeMatch = details.Runtime.match(/(\d+) min/);
+      const runtimeMin = runtimeMatch ? parseInt(runtimeMatch[1], 10) : NaN;
+      if (!isNaN(runtimeMin) && runtimeMin > maxMinutes) continue;
+    }
+
+    detailedMovies.push(details);
+    if (detailedMovies.length >= limit) break;
+  }
+
+  return detailedMovies;
 }
 
+
 export async function surpriseMe(mood = "random") {
-  const query = mood === "random" ? "movie" : mood;
-  const page = Math.max(1, Math.floor(Math.random() * 3) + 1);
-  const list = await searchByQuery(query, page);
-  if (list.length === 0) return null;
-  const pick = list[Math.floor(Math.random() * list.length)];
-  return getById(pick.imdbID);
+  const moods = Object.keys(moodToGenreId);
+  const selectedMood = mood === "random" ? moods[Math.floor(Math.random() * moods.length)] : mood;
+  const movies = await findByMood(selectedMood, 1);
+  return movies.length > 0 ? movies[0] : null;
 }
