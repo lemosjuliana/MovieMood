@@ -18,6 +18,7 @@ import Watchlist from "./pages/Watchlist";
 import Login from "./pages/Login";
 import FindMovies from "./pages/FindMovies";
 import About from "./pages/About"; 
+import CreateAccount from "./pages/CreateAccount";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/find-movies" element={<FindMovies />} />
         <Route path="/my-list" element={<Watchlist />} />
         <Route path="/about" element={<About />} />
+  <Route path="/signup" element={<CreateAccount />} />
         <Route path="/profile" element={<Login />} />
       </Routes>
       <Footer />
