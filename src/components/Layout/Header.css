@@ -1,0 +1,41 @@
+/* Import Open Sans font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  background-color: rgba(215, 16, 4, 0.37); /* #d71004 with 37% opacity */
+  font-family: 'Open Sans', sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header-left .logo {
+  height: 40px;
+}
+
+.header-right .nav-links {
+  display: flex;
+  list-style: none;
+  gap: 25px;
+  align-items: center;
+}
+
+.header-right .nav-links li {
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.header-right .nav-links li:hover {
+  color: rgba(241, 213, 213, 0.7);
+}
+
+.profile-icon {
+  font-size: 1.5rem;
+}

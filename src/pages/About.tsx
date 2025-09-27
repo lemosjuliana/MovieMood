@@ -1,14 +1,14 @@
 import React from "react";
 
-const Watchlist: React.FC = () => {
+const About: React.FC = () => {
   return (
     <div>
       <main style={{ padding: "40px", fontFamily: "'Open Sans', sans-serif", color: "white" }}>
-        <h1>Welcome to Watchlist!</h1>
-        <p>This is your Home page placeholder.</p>
+        <h1>Welcome to About!</h1>
+        <p>This is your About page placeholder.</p>
       </main>
     </div>
   );
 };
 
-export default Watchlist;
+export default About;
