@@ -1,0 +1,74 @@
+/* Layout and styles for FindMovies and MoodSelector */
+
+/* Page wrapper adjustments */
+main {
+  padding: 24px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Mood grid */
+.mood-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 18px 0;
+}
+
+.mood-btn {
+  padding: 8px 14px;
+  border-radius: 20px;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  min-width: 110px;
+  text-align: center;
+}
+
+/* Mood-specific classes all share the same red background */
+.mood-happy,
+.mood-peaceful,
+.mood-energetic,
+.mood-anxious,
+.mood-thankful {
+  background: #e11d21; /* unified red */
+}
+
+/* Selected state overrides to make it more prominent */
+.mood-btn.selected {
+  box-shadow: 0 6px 18px rgba(169,13,3,0.25);
+  transform: translateY(-2px);
+}
+
+/* Results grid */
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Page-specific styles moved from inline/utility classes */
+.findmovies-page {
+  min-height: 60vh; /* similar to min-h-dvh */
+  padding: 24px;
+}
+
+.findmovies-title {
+  font-size: 2rem; /* ~3xl */
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+/* Make all text inside the mood selector white for contrast against darker backgrounds */
+.mood-selector {
+  color: #ffffff;
+}
+
+/* Keep error text red even when nested in a white container */
+.mood-selector .text-red-600 { color: #dc2626; }

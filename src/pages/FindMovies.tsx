@@ -1,10 +1,11 @@
 import React from "react";
 import MoodSelector from "../components/MoodSelector";
+import "./FindMoviesPage.css";
 
 const FindMovies: React.FC = () => {
     return (
-        <main className="min-h-dvh p-6">
-            <h1 className="text-3xl font-bold mb-6">🎬 Movie Mood</h1>
+        <main className="findmovies-page">
+            <h1 className="findmovies-title">What's your mood today?</h1>
             <MoodSelector />
         </main>
     );
