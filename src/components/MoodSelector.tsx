@@ -40,17 +40,15 @@ export default function MoodSelector() {
   }
 
   return (
-    <section className="space-y-4">
+    <section className="mood-selector space-y-4">
       <h2 className="text-2xl font-semibold">Pick your mood</h2>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="mood-grid">
         {MOODS.map((m) => (
           <button
             key={m}
             onClick={() => handleSelect(m)}
-            className={`px-3 py-1 rounded border ${
-              selected === m ? "bg-blue-600 text-white" : "bg-white"
-            }`}
+            className={`mood-btn mood-${m.toLowerCase()} ${selected === m ? "selected" : ""}`}
           >
             {m}
           </button>
