@@ -1,6 +1,6 @@
 import React from "react";
 import MoodSelector from "../components/MoodSelector";
-import "./FindMoviesPage.css";
+import "../components/Layout/FindMoviesPage.css";
 
 const FindMovies: React.FC = () => {
     return (
