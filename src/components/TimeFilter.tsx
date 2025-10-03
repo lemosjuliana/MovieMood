@@ -1,4 +1,6 @@
-type Props = {
+import "./Layout/FindMoviesPage.css";
+
+type Props = { 
   minutes: number;
   setMinutes: (n: number) => void;
   onApply?: () => void;
@@ -6,8 +8,8 @@ type Props = {
 
 export default function TimeFilter({ minutes, setMinutes, onApply }: Props) {
   return (
-    <div className="flex items-center gap-3">
-      <label htmlFor="time" className="min-w-40">Time available (min):</label>
+    <div className="time-filter">
+      <label htmlFor="time">Time available (min):</label>
       <input
         id="time"
         type="range"
@@ -18,9 +20,7 @@ export default function TimeFilter({ minutes, setMinutes, onApply }: Props) {
         onChange={(e) => setMinutes(parseInt(e.target.value, 10))}
       />
       <span>{minutes} min</span>
-      <button className="ml-3 px-3 py-1 rounded border" onClick={onApply}>
-        Apply
-      </button>
+      <button onClick={onApply}>Apply</button>
     </div>
   );
 }

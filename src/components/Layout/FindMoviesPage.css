@@ -1,0 +1,167 @@
+/* Layout and styles for TimeFilter, FindMovies and MoodSelector */
+
+/* Import font */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
+/* Page wrapper adjustments */
+main {
+  padding: 24px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Mood grid */
+.mood-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 18px 0;
+}
+
+.mood-btn {
+  padding: 8px 14px;
+  border-radius: 20px;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  min-width: 110px;
+  text-align: center;
+}
+
+/* Mood-specific classes all share the same red background */
+.mood-happy,
+.mood-peaceful,
+.mood-energetic,
+.mood-anxious,
+.mood-thankful {
+  background: #e11d21; /* unified red */
+}
+
+.mood-btn:hover {
+   background-color: #8b0b02; /* slightly darker red */
+}
+
+/* Selected state overrides to make it more prominent */
+.mood-btn.selected {
+  box-shadow: 0 6px 18px rgba(169,13,3,0.25);
+  transform: translateY(-2px);
+}
+
+/* Results grid */
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+.time-filter {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-family: 'Open Sans', sans-serif;
+  padding: 50px 2px;
+  max-width: 600px;
+}
+
+/* Label */
+.time-filter label {
+  font-weight: 700;
+  font-size: 1.5rem;
+  min-width: 160px;
+  color: #fff;
+}
+
+/* Slider */
+.time-filter input[type="range"] {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 6px;
+  border-radius: 15px;
+  background: linear-gradient(to right, #a90d03, #d71004);
+  outline: none;
+  cursor: pointer;
+}
+
+/* Slider Thumb (Chrome/Safari/Edge) */
+.time-filter input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border: 2px solid #a90d03;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.time-filter input[type="range"]::-webkit-slider-thumb:hover {
+  background: #a90d03;
+  border-color: #fff;
+}
+
+/* Slider Thumb (Firefox) */
+.time-filter input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border: 2px solid #a90d03;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.time-filter input[type="range"]::-moz-range-thumb:hover {
+  background: #a90d03;
+  border-color: #fff;
+}
+
+/* Minutes text */
+.time-filter span {
+  font-weight: 600;
+  color: #a90d03;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Button */
+.time-filter button {
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: #e11d21; /* unified red */
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  min-width: 110px;
+  text-align: center;
+}
+
+.time-filter button:hover {
+  background-color: #8b0b02;
+}
+
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Page-specific styles moved from inline/utility classes */
+.findmovies-page {
+  min-height: 60vh; /* similar to min-h-dvh */
+  padding: 24px;
+}
+
+.findmovies-title {
+  font-size: 2rem; /* ~3xl */
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+/* Make all text inside the mood selector white for contrast against darker backgrounds */
+.mood-selector {
+  color: #ffffff;
+}
+
+/* Keep error text red even when nested in a white container */
+.mood-selector .text-red-600 { color: #dc2626; }
