@@ -1,25 +1,49 @@
+import { useState } from "react";
 import type { MovieDetails } from "../api/movies";
+import "../components/Layout/MovieCard.css";
 
-type Props = { movie: MovieDetails };
+type Props = {
+  movie: MovieDetails;
+  onAddToWatchlist?: (movie: MovieDetails) => void;
+};
 
-export default function MovieCard({ movie }: Props) {
+export default function MovieCard({ movie, onAddToWatchlist }: Props) {
+  const [added, setAdded] = useState(false);
+
   const poster =
     movie.Poster && movie.Poster !== "N/A"
       ? movie.Poster
       : "https://via.placeholder.com/300x445?text=No+Poster";
 
+  const handleAdd = () => {
+    setAdded(true);
+    onAddToWatchlist?.(movie);
+  };
+
   return (
-    <article className="border rounded p-3">
-      <img
-        src={poster}
-        alt={movie.Title}
-        className="w-full h-64 object-cover rounded mb-2"
-      />
-      <h3 className="font-semibold">
-        {movie.Title} ({movie.Year})
-      </h3>
-      <p className="text-sm">Rated: {movie.Rated || "N/A"} • {movie.Runtime}</p>
-      {movie.Plot && <p className="text-sm mt-1 line-clamp-3">{movie.Plot}</p>}
+    <article className="movie-card">
+      <div className="poster-wrapper">
+        <img src={poster} alt={movie.Title} className="poster" />
+
+        <button
+          className={`add-btn ${added ? "added" : ""}`}
+          onClick={handleAdd}
+          title={added ? "Added to Watchlist" : "Add to Watchlist"}
+          disabled={added}
+        >
+          {added ? "✔" : "＋"}
+        </button>
+      </div>
+
+      <div className="movie-info">
+        <h3 className="movie-title">
+          {movie.Title} <span className="movie-year">({movie.Year})</span>
+        </h3>
+        <p className="movie-meta">
+          Rated: {movie.Rated || "N/A"} • {movie.Runtime}
+        </p>
+        {movie.Plot && <p className="movie-plot">{movie.Plot}</p>}
+      </div>
     </article>
   );
 }
