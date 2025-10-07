@@ -1,0 +1,4 @@
+.about-img {
+  max-width: 100%; /* Image will take up 100% of its container's width, but not exceed its original width */
+  height: auto;    /* Maintain aspect ratio */
+}

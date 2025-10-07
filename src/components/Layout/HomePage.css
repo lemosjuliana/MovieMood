@@ -105,7 +105,7 @@
 }
 
 .feature-img {
-  display: block;
+  display: center;
   width: 64px;
   height: 64px;
   object-fit: contain;
