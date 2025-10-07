@@ -24,10 +24,8 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
   font-family: 'Open Sans', sans-serif;
   background-color: #19181d;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }

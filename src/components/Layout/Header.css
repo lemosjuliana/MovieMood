@@ -2,16 +2,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
 
 .header {
+  --header-height: 64px;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 40px;
+  height: var(--header-height);
   background-color: rgba(215, 16, 4, 0.37); /* #d71004 with 37% opacity */
   font-family: 'Open Sans', sans-serif;
-  position: sticky;
-  top: 0;
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-sizing: border-box;
 }
 
 .header-left .logo {
@@ -39,3 +44,8 @@
 .profile-icon {
   font-size: 1.5rem;
 }
+
+/* Note: fixed header overlays page content. If your content is hidden under the header,
+   add top padding equal to the header height to your main container, e.g.:
+   main { padding-top: var(--header-height); }
+*/

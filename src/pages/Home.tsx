@@ -1,8 +1,8 @@
 import React from "react";
 import heroImg from "../assets/hero.png";
-import featA from "../assets/logo.png";
-import featB from "../assets/logo2.png";
-import featC from "../assets/react.svg";
+import featA from "../assets/happy_home.png";
+import featB from "../assets/movie_home.png";
+import featC from "../assets/list_home.png";
 import "../components/Layout/HomePage.css";
 
 const Home: React.FC = () => {
@@ -25,11 +25,11 @@ const Home: React.FC = () => {
               <p>Tell us how you feel and we'll match movies to your vibe.</p>
             </div>
             <div className="feature-card">
-              <img src={featA} alt="Curated lists" className="feature-img" />
+              <img src={featB} alt="Curated lists" className="feature-img" />
               <p>We’ll give you a list of movies tailored to your tastes.</p>
             </div>
             <div className="feature-card">
-              <img src={featA} alt="Save and share" className="feature-img" />
+              <img src={featC} alt="Save and share" className="feature-img" />
               <p>Find the best movie for you and save favorites to your watchlist.</p>
             </div>
           </div>
