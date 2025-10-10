@@ -39,6 +39,12 @@ export default function MoodSelector() {
     if (selected) await fetchForMood(selected, minutes);
   }
 
+  async function handleSurprise() {
+    const randomMood = MOODS[Math.floor(Math.random() * MOODS.length)];
+    // reuse the same select flow so selected state and results update
+    await handleSelect(randomMood);
+  }
+
   return (
     <section className="mood-selector space-y-4">
       <h2 className="text-2xl font-semibold">Pick your mood</h2>
@@ -53,6 +59,10 @@ export default function MoodSelector() {
             {m}
           </button>
         ))}
+      </div>
+
+      <div className="surprise-wrapper">
+        <button className="mood-btn surprise-btn" onClick={handleSurprise} aria-label="Surprise me">Surprise Me!</button>
       </div>
 
       <TimeFilter minutes={minutes} setMinutes={setMinutes} onApply={handleApplyTime} />
