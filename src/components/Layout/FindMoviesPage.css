@@ -1,15 +1,12 @@
 /* Layout and styles for TimeFilter, FindMovies and MoodSelector */
 
-/* Import font */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
 
-/* Page wrapper adjustments */
 main {
   padding: 24px;
   font-family: 'Open Sans', sans-serif;
 }
 
-/* Mood grid */
 .mood-grid {
   display: flex;
   flex-wrap: wrap;
@@ -28,23 +25,34 @@ main {
   text-align: center;
 }
 
-/* Mood-specific classes all share the same red background */
 .mood-happy,
 .mood-peaceful,
 .mood-energetic,
 .mood-anxious,
 .mood-thankful {
-  background: #e11d21; /* unified red */
+  background: #e11d21; 
 }
 
 .mood-btn:hover {
-   background-color: #8b0b02; /* slightly darker red */
+   background-color: #8b0b02; 
 }
 
-/* Selected state overrides to make it more prominent */
 .mood-btn.selected {
   box-shadow: 0 6px 18px rgba(169,13,3,0.25);
   transform: translateY(-2px);
+}
+
+.surprise-wrapper {
+  margin-top: 12px;
+}
+
+.surprise-btn {
+  background: transparent;
+  border: 2px dashed rgba(255,255,255,0.15);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 20px;
+  min-width: 140px;
 }
 
 /* Results grid */
@@ -125,7 +133,7 @@ main {
 .time-filter button {
   padding: 8px 14px;
   border-radius: 20px;
-  background: #e11d21; /* unified red */
+  background: #e11d21; 
   color: #fff;
   font-weight: 600;
   border: none;
@@ -147,12 +155,12 @@ main {
 
 /* Page-specific styles moved from inline/utility classes */
 .findmovies-page {
-  min-height: 60vh; /* similar to min-h-dvh */
+  min-height: 60vh; 
   padding: 24px;
 }
 
 .findmovies-title {
-  font-size: 2rem; /* ~3xl */
+  font-size: 2rem; 
   font-weight: 700;
   margin-bottom: 1.5rem;
   color: #fff;
