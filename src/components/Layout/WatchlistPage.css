@@ -1,0 +1,74 @@
+.watchlist-page {
+  padding: 40px;
+  font-family: 'Open Sans', sans-serif;
+  color: #fff;
+}
+
+.watchlist-page h1 {
+  margin: 0 0 18px 0;
+}
+
+.watchlist-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+.watchlist-item {
+  background: linear-gradient(135deg, #4d4b54 0%, #4d4b54 100%);
+  padding: 12px;
+  border-radius: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.watchlist-poster {
+  width: 96px;
+  height: 144px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.watchlist-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.watchlist-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.watchlist-bottom {
+  margin-top: 8px;
+}
+
+.watchlist-title {
+  font-size: 1.05rem;
+}
+
+.watchlist-year {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.95rem;
+}
+
+.remove-btn {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  background: rgba(255,255,255,0.04);
+}
