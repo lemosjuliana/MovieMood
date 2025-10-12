@@ -226,3 +226,8 @@ export function clearRecommendationCache(mood = null) {
     usedPagesByMood.clear();
   }
 }
+
+// Wrapper for the watchlist
+export async function getDetailsByTitle(title, year) {
+  return await getMovieDetailsFromOMDb(title, year); 
+}

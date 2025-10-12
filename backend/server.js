@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
 import { findByMood, surpriseMe } from "./movies.js";
+import { getDetailsByTitle } from "./movies.js"; 
 
 dotenv.config();
 const app = express();
@@ -112,4 +113,68 @@ app.get("/api/surprise", async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Backend running at http://localhost:${port}`);
+});
+
+// ----------------- Watchlist endpoint -----------------
+// Add a title for a user
+app.post("/api/watchlist", async (req, res) => {
+  const { email, title } = req.body;
+  if (!email || !title) return res.status(400).json({ error: "email and title required" });
+
+  const { data, error } = await supabase
+    .from("watchlist")
+    .insert({ email, title })
+    .select("id, email, title, created_at")
+    .single();
+
+  if (error) {
+    // unique(email,title) will trigger a Supabase error on duplicates
+    return res.status(400).json({ error: error.message });
+  }
+  res.json({ ok: true, item: data });
+});
+
+// List titles for a user
+app.get("/api/watchlist", async (req, res) => {
+  const { email } = req.query;
+  if (!email) return res.status(400).json({ error: "email required" });
+
+  const { data, error } = await supabase
+    .from("watchlist")
+    .select("id, title, created_at")
+    .eq("email", email)
+    .order("created_at", { ascending: false });
+
+  if (error) return res.status(500).json({ error: error.message });
+  res.json({ items: data ?? [] });
+});
+
+// Remove a title for a user
+app.delete("/api/watchlist", async (req, res) => {
+  const { email, title } = req.body;
+  if (!email || !title) return res.status(400).json({ error: "email and title required" });
+
+  const { error } = await supabase
+    .from("watchlist")
+    .delete()
+    .eq("email", email)
+    .eq("title", title);
+
+  if (error) return res.status(500).json({ error: error.message });
+  res.json({ ok: true });
+});
+
+// Fetch full details by title (so frontend can reuse MovieCard)
+app.get("/api/movieByTitle", async (req, res) => {
+  const { title, year } = req.query;
+  if (!title) return res.status(400).json({ error: "title required" });
+
+  try {
+    const details = await getDetailsByTitle(title, year);
+    if (!details) return res.status(404).json({ error: "Not found" });
+    res.json(details);
+  } catch (e) {
+    console.error("movieByTitle error:", e);
+    res.status(500).json({ error: "Failed to fetch details" });
+  }
 });
