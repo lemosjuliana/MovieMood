@@ -32,6 +32,10 @@ MovieMood uses:
   
 ---
 
+## UI Document
+- [Link to the UI document](https://drive.google.com/file/d/1Huz0-Vgngh1h6Q5ldBsibHqEJ40dQrnj/view)
+
+
 ## Run the project
 ```bash
   pnpm start
