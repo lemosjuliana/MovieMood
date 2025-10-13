@@ -4,6 +4,7 @@ import { findByMood } from "../api/movies";
 import type { MovieDetails } from "../api/movies";
 import TimeFilter from "./TimeFilter";
 import MovieCard from "./MovieCard";
+import "./Layout/FindMoviesPage.css";
 
 const MOODS = ["Happy", "Peaceful", "Energetic", "Anxious", "Thankful"];
 
@@ -26,7 +27,7 @@ export default function MoodSelector() {
       setResults(data);
     } catch (e: unknown) {
       if (e instanceof Error) {
-        setError(e.message ?? "Failed to fetch movies");
+        setError(e.message);
       } else {
         setError("Failed to fetch movies");
       }
@@ -43,6 +44,13 @@ export default function MoodSelector() {
   async function handleApplyTime() {
     if (selected) await fetchForMood(selected, minutes);
   }
+
+    async function handleSurprise() {
+    const randomMood = MOODS[Math.floor(Math.random() * MOODS.length)];
+    // reuse the same select flow so selected state and results update
+    await handleSelect(randomMood);
+  }
+
 
   // ---- Add to Watchlist: calls your Express backend ----
   async function addTitle(title: string) {
@@ -71,45 +79,35 @@ export default function MoodSelector() {
   }
 
   return (
-    <section style={{ padding: 24 }}>
-      <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 12 }}>Pick your mood</h2>
+    <section className="mood-selector">
+      <h2>Pick your mood</h2>
 
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
+      <div className="mood-grid">
         {MOODS.map((m) => (
           <button
             key={m}
             onClick={() => handleSelect(m)}
-            style={{
-              padding: "8px 12px",
-              borderRadius: 999,
-              border: "1px solid #2a2f3b",
-              background: selected === m ? "#6ea8ff" : "#151924",
-              color: selected === m ? "#0b1225" : "#e6eaf2",
-              cursor: "pointer",
-            }}
+            className={`mood-btn mood-${m.toLowerCase()} ${selected === m ? "selected" : ""}`}
           >
             {m}
           </button>
         ))}
       </div>
 
+      <div className="surprise-wrapper">
+        <button className="mood-btn surprise-btn" onClick={handleSurprise} aria-label="Surprise me">Surprise Me!</button>
+      </div>
+
       <TimeFilter minutes={minutes} setMinutes={setMinutes} onApply={handleApplyTime} />
 
-      {loading && <p style={{ marginTop: 12 }}>Loading…</p>}
+      {loading && <p className="loading">Loading…</p>}
       {error && (
-        <p style={{ marginTop: 12, color: "#ffb4b4" }}>
+        <p className="text-red-600" role="alert">
           {error}
         </p>
       )}
 
-      <div
-        style={{
-          marginTop: 16,
-          display: "grid",
-          gap: 16,
-          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-        }}
-      >
+      <div className="grid" style={{ marginTop: 16 }}>
         {results.map((movie) => (
           <MovieCard
             key={movie.imdbID}
