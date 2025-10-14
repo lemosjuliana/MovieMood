@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
 import { findByMood, surpriseMe } from "./movies.js";
-import { getDetailsByTitle } from "./movies.js"; 
+import { getDetailsByTitle } from "./movies.js";
 
 dotenv.config();
 const app = express();
@@ -16,7 +16,7 @@ app.use(express.json());
 // ----------------- Supabase client -----------------
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY // service role key required for insert
+  process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
 // ----------------- User signup -----------------
@@ -27,10 +27,8 @@ app.post("/api/signup", async (req, res) => {
     return res.status(400).json({ error: "Email and password required" });
 
   try {
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert into "profiles" table
     const { error } = await supabase.from("profiles").insert([
       { email, password: hashedPassword },
     ]);
@@ -55,7 +53,6 @@ app.post("/api/login", async (req, res) => {
     return res.status(400).json({ error: "Email and password required" });
 
   try {
-    // Get the user from the "profiles" table
     const { data, error } = await supabase
       .from("profiles")
       .select("*")
@@ -68,7 +65,6 @@ app.post("/api/login", async (req, res) => {
         .json({ success: false, message: "Invalid email or password." });
     }
 
-    // Compare hashed password
     const match = await bcrypt.compare(password, data.password);
 
     if (!match) {
@@ -77,7 +73,6 @@ app.post("/api/login", async (req, res) => {
         .json({ success: false, message: "Invalid email or password." });
     }
 
-    // Success
     res.json({ success: true, message: "Logged in!", user: { email: data.email } });
   } catch (err) {
     console.error(err);
@@ -111,15 +106,12 @@ app.get("/api/surprise", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Backend running at http://localhost:${port}`);
-});
-
-// ----------------- Watchlist endpoint -----------------
+// ----------------- Watchlist endpoints -----------------
 // Add a title for a user
 app.post("/api/watchlist", async (req, res) => {
   const { email, title } = req.body;
-  if (!email || !title) return res.status(400).json({ error: "email and title required" });
+  if (!email || !title) 
+    return res.status(400).json({ error: "email and title required" });
 
   const { data, error } = await supabase
     .from("watchlist")
@@ -129,6 +121,7 @@ app.post("/api/watchlist", async (req, res) => {
 
   if (error) {
     // unique(email,title) will trigger a Supabase error on duplicates
+    console.error("Watchlist insert error:", error);
     return res.status(400).json({ error: error.message });
   }
   res.json({ ok: true, item: data });
@@ -145,14 +138,18 @@ app.get("/api/watchlist", async (req, res) => {
     .eq("email", email)
     .order("created_at", { ascending: false });
 
-  if (error) return res.status(500).json({ error: error.message });
+  if (error) {
+    console.error("Watchlist fetch error:", error);
+    return res.status(500).json({ error: error.message });
+  }
   res.json({ items: data ?? [] });
 });
 
 // Remove a title for a user
 app.delete("/api/watchlist", async (req, res) => {
   const { email, title } = req.body;
-  if (!email || !title) return res.status(400).json({ error: "email and title required" });
+  if (!email || !title) 
+    return res.status(400).json({ error: "email and title required" });
 
   const { error } = await supabase
     .from("watchlist")
@@ -160,7 +157,10 @@ app.delete("/api/watchlist", async (req, res) => {
     .eq("email", email)
     .eq("title", title);
 
-  if (error) return res.status(500).json({ error: error.message });
+  if (error) {
+    console.error("Watchlist delete error:", error);
+    return res.status(500).json({ error: error.message });
+  }
   res.json({ ok: true });
 });
 
@@ -177,4 +177,8 @@ app.get("/api/movieByTitle", async (req, res) => {
     console.error("movieByTitle error:", e);
     res.status(500).json({ error: "Failed to fetch details" });
   }
+});
+
+app.listen(port, () => {
+  console.log(`Backend running at http://localhost:${port}`);
 });

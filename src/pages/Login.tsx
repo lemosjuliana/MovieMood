@@ -21,10 +21,15 @@ const Login: React.FC = () => {
       const data = await res.json();
 
       if (data.success) {
+        // ✅ Save email to localStorage so Watchlist knows who is logged in
+        localStorage.setItem("mm_email", data.user.email);
+
         setMessage("✅ Logged in!");
         setEmail("");
         setPassword("");
-        // You can also store user info in context or localStorage here
+
+        // ✅ Optional: Redirect to the watchlist page after login
+        window.location.href = "/watchlist";
       } else {
         setMessage(`❌ ${data.message}`);
       }
