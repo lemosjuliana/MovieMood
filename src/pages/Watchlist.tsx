@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import MovieCard from "../components/MovieCard";
 import LogoutButton from "../components/LogoutButton";
-import MoodSelector from "../components/MoodSelector"; // <-- import MoodSelector
 import type { MovieDetails } from "../api/movies";
 import { BACKEND_URL } from "../api/config"; // <-- import backend URL
 
