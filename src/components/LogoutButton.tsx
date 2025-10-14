@@ -13,7 +13,7 @@ const LogoutButton: React.FC = () => {
     <button
       onClick={handleLogout}
       style={{
-        backgroundColor: "#e63946",
+        backgroundColor: "#a90d03",
         color: "white",
         border: "none",
         borderRadius: "8px",

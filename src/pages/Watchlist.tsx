@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import MovieCard from "../components/MovieCard";
+import "../components/Layout/WatchlistPage.css";
 import LogoutButton from "../components/LogoutButton";
 import MoodSelector from "../components/MoodSelector"; // <-- import MoodSelector
 import type { MovieDetails } from "../api/movies";
@@ -97,7 +98,7 @@ export default function Watchlist() {
   return (
     <main style={{ padding: 24 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1>Your Watchlist</h1>
+        <h1 className='watchlist-page'>Your Watchlist</h1>
         <LogoutButton />
       </div>
 
@@ -114,7 +115,7 @@ export default function Watchlist() {
             onAddToWatchlist={add}
           />
         ))}
-        {movies.length === 0 && <p>No titles yet.</p>}
+        {movies.length === 0 && <p style={{ color: "white", textAlign: "center" }}>No titles yet.</p>}
       </div>
     </main>
   );
