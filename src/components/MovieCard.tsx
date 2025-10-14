@@ -4,10 +4,17 @@ import "../components/Layout/MovieCard.css";
 
 type Props = {
   movie: MovieDetails;
-  onAddToWatchlist?: (movie: MovieDetails) => void;
+  onAddToWatchlist?: (movie: MovieDetails) => Promise<boolean>;
+  onRemoveFromWatchlist?: (movie: MovieDetails) => void;
+  isInWatchlist?: boolean;
 };
 
-export default function MovieCard({ movie, onAddToWatchlist }: Props) {
+export default function MovieCard({
+  movie,
+  onAddToWatchlist,
+  onRemoveFromWatchlist,
+  isInWatchlist = false,
+}: Props) {
   const [added, setAdded] = useState(false);
 
   const poster =
@@ -15,24 +22,40 @@ export default function MovieCard({ movie, onAddToWatchlist }: Props) {
       ? movie.Poster
       : "https://via.placeholder.com/300x445?text=No+Poster";
 
-  const handleAdd = () => {
-    setAdded(true);
-    onAddToWatchlist?.(movie);
+  const handleAdd = async () => {
+    console.log("Add button clicked for", movie.Title);
+    if (onAddToWatchlist) {
+      const success = await onAddToWatchlist(movie);
+      console.log("Add movie result:", success);
+      if (success) setAdded(true);
+    }
+  };
+
+  const handleRemove = () => {
+    console.log("Remove button clicked for", movie.Title);
+    if (onRemoveFromWatchlist) onRemoveFromWatchlist(movie);
+    setAdded(false);
   };
 
   return (
     <article className="movie-card">
       <div className="poster-wrapper">
         <img src={poster} alt={movie.Title} className="poster" />
-
-        <button
-          className={`add-btn ${added ? "added" : ""}`}
-          onClick={handleAdd}
-          title={added ? "Added to Watchlist" : "Add to Watchlist"}
-          disabled={added}
-        >
-          {added ? "✔" : "＋"}
-        </button>
+        {!isInWatchlist && (
+          <button
+            className={`add-btn ${added ? "added" : ""}`}
+            onClick={handleAdd}
+            title={added ? "Added to Watchlist" : "Add to Watchlist"}
+            disabled={added}
+          >
+            {added ? "✔" : "＋"}
+          </button>
+        )}
+        {isInWatchlist && onRemoveFromWatchlist && (
+          <button onClick={handleRemove} style={{ marginTop: 8 }}>
+            Remove
+          </button>
+        )}
       </div>
 
       <div className="movie-info">

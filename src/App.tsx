@@ -16,9 +16,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/find-movies" element={<FindMovies />} />
-        <Route path="/my-list" element={<Watchlist />} />
+        <Route path="/my-list" element={<Watchlist />} /> {/* <-- changed path */}
         <Route path="/about" element={<About />} />
-  <Route path="/signup" element={<CreateAccount />} />
+        <Route path="/signup" element={<CreateAccount />} />
         <Route path="/profile" element={<Login />} />
       </Routes>
       <Footer />
@@ -27,4 +27,3 @@ function App() {
 }
 
 export default App;
-

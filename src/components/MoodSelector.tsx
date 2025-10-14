@@ -1,4 +1,4 @@
-// src/components/MoodSelector.tsx
+// MoodSelector.tsx
 import { useState } from "react";
 import { findByMood } from "../api/movies";
 import type { MovieDetails } from "../api/movies";
@@ -8,15 +8,17 @@ import "./Layout/FindMoviesPage.css";
 
 const MOODS = ["Happy", "Peaceful", "Energetic", "Anxious", "Thankful"];
 
-export default function MoodSelector() {
+type MoodSelectorProps = {
+  onAddToWatchlist?: (movie: MovieDetails) => void;
+};
+
+export default function MoodSelector({ onAddToWatchlist }: MoodSelectorProps) {
   const [selected, setSelected] = useState<string>("");
   const [minutes, setMinutes] = useState<number>(120);
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<MovieDetails[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  // If you store the logged-in user's email after login, read it here.
-  // Replace with your real auth source if different.
   const email = (typeof window !== "undefined" && localStorage.getItem("mm_email")) || "";
 
   async function fetchForMood(mood: string, maxMin?: number) {
@@ -26,11 +28,8 @@ export default function MoodSelector() {
       const data = await findByMood(mood, 3, maxMin);
       setResults(data);
     } catch (e: unknown) {
-      if (e instanceof Error) {
-        setError(e.message);
-      } else {
-        setError("Failed to fetch movies");
-      }
+      if (e instanceof Error) setError(e.message);
+      else setError("Failed to fetch movies");
     } finally {
       setLoading(false);
     }
@@ -45,36 +44,34 @@ export default function MoodSelector() {
     if (selected) await fetchForMood(selected, minutes);
   }
 
-    async function handleSurprise() {
+  async function handleSurprise() {
     const randomMood = MOODS[Math.floor(Math.random() * MOODS.length)];
-    // reuse the same select flow so selected state and results update
     await handleSelect(randomMood);
   }
 
-
-  // ---- Add to Watchlist: calls your Express backend ----
-  async function addTitle(title: string) {
+  // ---- Add to Watchlist: calls parent callback ----
+  async function addTitle(movie: MovieDetails): Promise<boolean> {
     if (!email) {
       alert("Please log in to use your watchlist.");
-      return;
+      return false;
     }
     try {
-      const res = await fetch("/api/watchlist", {
+      const res = await fetch("http://localhost:4000/api/watchlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, title }),
+        body: JSON.stringify({ email, title: movie.Title }),
       });
-      if (!res.ok) {
-        const j = await res.json().catch(() => ({}));
-        throw new Error(j.error || "Failed to add to watchlist");
-      }
-      // Optional: toast/success UI here
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Failed to add to watchlist");
+
+      // ✅ Call the callback to update parent state
+      if (onAddToWatchlist) onAddToWatchlist(movie);
+
+      return true;
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        alert(err.message || "Could not add to watchlist");
-      } else {
-        alert("Could not add to watchlist");
-      }
+      if (err instanceof Error) alert(err.message || "Could not add to watchlist");
+      else alert("Could not add to watchlist");
+      return false;
     }
   }
 
@@ -95,24 +92,22 @@ export default function MoodSelector() {
       </div>
 
       <div className="surprise-wrapper">
-        <button className="mood-btn surprise-btn" onClick={handleSurprise} aria-label="Surprise me">Surprise Me!</button>
+        <button className="mood-btn surprise-btn" onClick={handleSurprise} aria-label="Surprise me">
+          Surprise Me!
+        </button>
       </div>
 
       <TimeFilter minutes={minutes} setMinutes={setMinutes} onApply={handleApplyTime} />
 
       {loading && <p className="loading">Loading…</p>}
-      {error && (
-        <p className="text-red-600" role="alert">
-          {error}
-        </p>
-      )}
+      {error && <p className="text-red-600">{error}</p>}
 
       <div className="grid" style={{ marginTop: 16 }}>
         {results.map((movie) => (
           <MovieCard
             key={movie.imdbID}
             movie={movie}
-            onAddToWatchlist={() => addTitle(movie.Title)}
+            onAddToWatchlist={() => addTitle(movie)}
           />
         ))}
       </div>
